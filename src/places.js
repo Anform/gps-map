@@ -37,7 +37,7 @@ export default function Places ({ setLocation }) {
         <Combobox onSelect = {handleSelect}>
             <ComboboxInput value = {value} onChange = {e => setValue(e.target.value)}
             className = "comboobox-input"
-            placeholder = "Enter location..."
+            placeholder = "Type Current Location..."
             ></ComboboxInput>
             <ComboboxPopover>
                 <ComboboxList>

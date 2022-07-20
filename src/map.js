@@ -3,6 +3,7 @@ import {
     GoogleMap,
     Marker,
     Circle,
+    DirectionsRenderer,
     MarkerClusterer,
   } from "@react-google-maps/api";
   import Places from "./places";
@@ -11,6 +12,8 @@ import {
 
   export default function Map() {
     const [location, setLocation] = useState({})
+    const [directions, setDirections] = useState()
+    const [storeNear, setStoreNear] = useState(0)
     const mapRef = useRef()
     const center = useMemo(() => ({lat: 39, lng : -77}), []);
     const options = useMemo(() => ({
@@ -24,10 +27,29 @@ import {
         if(location) return generateStores(location);
     },[location])
 
+    const getDirections = (place) => {
+        if(!location) return;
+
+        const service = new window.google.maps.DirectionsService()
+        service.route(
+            {
+                origin: place,
+                destination: location,
+                travelMode: window.google.maps.TravelMode.WALKING,
+            },
+            (result, status) => {
+                if(status === "OK" && result)
+                {
+                    setDirections(result)
+                }
+            }
+        )
+    }
+
 
     return <div className = "container">
         <div className = "controls">
-            <h1>Test</h1>
+            <h1>How many resturants are near me?</h1>
             <Places setLocation = {(position)=> {
                 setLocation(position);
                 mapRef.current.panTo(position);
@@ -43,6 +65,20 @@ import {
                 options = {options}
                 onLoad = {onLoad}
             >
+                {directions ? (
+                    <>
+                        <DirectionsRenderer directions = {directions} options = {{
+                            polylineOptions: {
+                                zIndex: 50,
+                                strokeColor: "#880808",
+                                strokeWeight: 5
+                            }
+                        }}></DirectionsRenderer>
+                    </>
+                ) : (
+                    <>
+                    </>
+                )}
             {location ? (
                 <>
                     <Marker
@@ -53,11 +89,14 @@ import {
                         <Marker
                             key = {store.lat}
                             position = {store}
+                            onClick = {() => {
+                            getDirections(store)
+                            }}
                             >
                             
                         </Marker>
                     ))}
-                    <Circle center={location} radius={1000} options={closeOptions} />
+                    <Circle center={location} radius={1000} options={closeOptions}/>
                 </>
             ) :(
                 <>
@@ -71,10 +110,9 @@ import {
 
   const generateStores = (position) => {
     const stores = []
-    const maxAmount = Math.random() * (50 - 10) + 10
-    for(let x = 0; x < maxAmount; x++)
+    for(let x = 0; x < 100; x++)
     {
-        const direction = Math.random() < 0.5 ? -100 : 100;
+        const direction = Math.random() < 0.5 ? -75 : 75;
         stores.push({
             lat : position.lat + Math.random() / direction,
             lng : position.lng + Math.random() / direction,
