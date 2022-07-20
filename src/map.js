@@ -35,7 +35,9 @@ import {
                 mapContainerClassName = "map-container" 
                 options = {options}
                 onLoad = {onLoad}
-            ></GoogleMap>
+            >
+                {location && <Marker position = {location}/>}
+            </GoogleMap>
         </div>
     </div>;
   }
