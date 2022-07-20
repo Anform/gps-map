@@ -5,7 +5,7 @@ import "./globals.css"
 function App() {
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: "AIzaSyAD2bQfWIdZUDz4xacSY0Ks2TjfqmATPeU",
     libraries: ["places"]
   });
   if(!isLoaded) return <div>Loading....</div>
