@@ -5,7 +5,7 @@ export default function Distance({ leg }) {
         <div>
             <p>
                 This resturant is <span className = "highlight">{leg.distance.text}</span> away 
-                from your current location. Estimated travel time : <span className = "highLight">{leg.duration.text}</span>
+                from your current location. Estimated travel time : <span className = "highlight">{leg.duration.text}</span>
             </p>
         </div>
     )

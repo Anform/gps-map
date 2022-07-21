@@ -7,10 +7,13 @@ import {
     MarkerClusterer,
   } from "@react-google-maps/api";
   import Places from "./places";
+  import Distance from "./distance";
+  import { toast } from "react-toastify"
+  import "react-toastify/dist/ReactToastify.css"
 
   var max = 0; 
 
-
+  toast.configure()
   export default function Map() {
     const [location, setLocation] = useState({})
     const [directions, setDirections] = useState()
@@ -21,6 +24,7 @@ import {
         disableDefaultUI: true,
         clickableIcons: false,
     }), [])
+
 
     const onLoad = useCallback(map => (mapRef.current = map), []);
     const stores = useMemo(function() {
@@ -52,8 +56,17 @@ import {
             <Places setLocation = {(position)=> {
                 setLocation(position);
                 mapRef.current.panTo(position);
+                notify();
             }}>
             </Places>
+            {directions ?  (
+                <>
+                    <Distance leg = {directions.routes[0].legs[0]}></Distance>
+                </>
+            ): (
+                <>
+                </>
+            )}
         </div>
 
         <div className = "map">
@@ -109,19 +122,24 @@ import {
     </div>;
   }
 
+  const notify = () => {
+    toast.info('There are ' + max +' resturants within 1 mile of your location!', {autoClose: false})
+}
+
   const generateStores = (position) => {
     const stores = []
-    const maxNumber = Math.random() * (50 - 15) + 5
+    const maxNumber = Math.random() * (100 - 15) + 5
     for(let x = 0; x < maxNumber; x++)
     {
-        const direction = Math.random() < 0.5 ? -150 : 150;
+        const direction = Math.random() < 0.5 ? -140 : 140;
         stores.push({
             lat : position.lat + Math.random() / direction,
             lng : position.lng + Math.random() / direction,
         });
     }
+
     max = parseInt(Math.ceil(maxNumber))
-    
+
     return stores; 
 }
 

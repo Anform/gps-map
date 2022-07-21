@@ -32,8 +32,13 @@ export default function Places ({ setLocation }) {
         setLocation({ lat, lng })
     }
 
+    const reloadPage = () => {
+        window.location.reload()
+    }
+
 
     return (
+        <div>
         <Combobox onSelect = {handleSelect}>
             <ComboboxInput value = {value} onChange = {e => setValue(e.target.value)}
             className = "comboobox-input"
@@ -47,5 +52,7 @@ export default function Places ({ setLocation }) {
                 </ComboboxList>
             </ComboboxPopover>
         </Combobox>
+        <button onClick={reloadPage}>Reset Map</button>
+        </div>
     )
 }
