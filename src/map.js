@@ -8,12 +8,12 @@ import {
   } from "@react-google-maps/api";
   import Places from "./places";
 
+  var max = 0; 
 
 
   export default function Map() {
     const [location, setLocation] = useState({})
     const [directions, setDirections] = useState()
-    const [storeNear, setStoreNear] = useState(0)
     const mapRef = useRef()
     const center = useMemo(() => ({lat: 39, lng : -77}), []);
     const options = useMemo(() => ({
@@ -45,7 +45,6 @@ import {
             }
         )
     }
-
 
     return <div className = "container">
         <div className = "controls">
@@ -86,15 +85,17 @@ import {
                         icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png">
                     </Marker>
                     {stores.map(store => (
-                        <Marker
-                            key = {store.lat}
-                            position = {store}
-                            onClick = {() => {
-                            getDirections(store)
-                            }}
-                            >
-                            
-                        </Marker>
+                        <>
+                            <Marker
+                                key = {store.lat}
+                                position = {store}
+                                onClick = {() => {
+                                getDirections(store)
+                                }}
+                                >
+                            </Marker>
+                        </>
+                        
                     ))}
                     <Circle center={location} radius={1000} options={closeOptions}/>
                 </>
@@ -110,14 +111,17 @@ import {
 
   const generateStores = (position) => {
     const stores = []
-    for(let x = 0; x < 100; x++)
+    const maxNumber = Math.random() * (50 - 15) + 5
+    for(let x = 0; x < maxNumber; x++)
     {
-        const direction = Math.random() < 0.5 ? -75 : 75;
+        const direction = Math.random() < 0.5 ? -150 : 150;
         stores.push({
             lat : position.lat + Math.random() / direction,
             lng : position.lng + Math.random() / direction,
         });
     }
+    max = parseInt(Math.ceil(maxNumber))
+    
     return stores; 
 }
 
